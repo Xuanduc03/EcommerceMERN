@@ -37,25 +37,28 @@ const ProductSchema = new mongoose.Schema(
         productId : {
             type : Number
         },
-        // specifications: {
-        //     processor: { 
-        //         type: String, 
-        //         required: true 
-        //     },
-        //     memory: { 
-        //         type: String, 
-        //         required: true 
-        //     },
-        //     display: { 
-        //         type: String, 
-        //         required: true 
-        //     },
-        //     storage: { 
-        //         type: String, 
-        //         required: true 
-        //     },
-        // },
-
+        specifications: {
+            processor: { 
+                type: String, 
+                required: true 
+            },
+            memory: { 
+                type: String, 
+                required: true
+            },
+            display: { 
+                type: String, 
+                required: true 
+            },
+            storage: { 
+                type: String, 
+                required: true 
+            },
+            color: {
+                type: String,
+                required : true
+            }
+        },
     },
     {
         timestamps: true

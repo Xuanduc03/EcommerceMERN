@@ -1,5 +1,4 @@
-
-const backendDomain = "http://localhost:8080"
+const backendDomain = "http://localhost:8080";
 
 const SummaryApi = {
     //auth api
@@ -48,6 +47,21 @@ const SummaryApi = {
     },
     delete_product : {
         url: `${backendDomain}/api/delete-product`,
+        method: 'delete'
+    },
+
+
+    // crud category
+    add_category: {
+        url : `${backendDomain}/api/add-category`,
+        method: "post"
+    },
+    list_category: {
+        url : `${backendDomain}/api/list-category`,
+        method: 'get'
+    },
+    delete_category : {
+        url : `${backendDomain}/api/delete-category`,
         method: 'delete'
     }
     

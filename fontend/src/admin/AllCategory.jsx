@@ -1,82 +1,64 @@
 import React, { useEffect, useState } from 'react';
+import { AddCategory } from './crud/category/AddCategory';
 import SummaryApi from '../common/helper';
 import { toast } from 'react-toastify';
-import { EditUser } from './crud/user/EditUser';
-import { DeleteUser } from './crud/user/DeleteUser';
-import { AddUser } from './crud/user/AddUser';
+import { DeleteCategory } from './crud/category/DeleteCategory';
 
 
-export const AllUsers = () => {
-  const [allUsers, setAllUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [isEditUser, setEditUser] = useState(false);
-  const [isDeleteUser, setDeleteUser] = useState(false);
-  const [isAddUser, setIsAddUser] = useState(false);
+const AllCategries = () => {
+  const [isAddCategory, setAddCategory] = useState(false);
+  const [isDeleteCategory, setDeleteCategory] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(false);
+  const [allCategory, setAllCategory] = useState([]);
 
-  const fetchAllUsers = async () => {
-    const fetchData = await fetch(SummaryApi.all_users.url, {
-      method: SummaryApi.all_users.method,
-      credentials: "include"
-    });
-    const dataResponse = await fetchData.json();
+  const fetchListCategories = async () => {
+    try {
+      const fetchData = await fetch(SummaryApi.list_category.url, {
+        method: SummaryApi.list_category.method,
+        credentials: "include"
+      });
 
-    if (dataResponse.success) {
-      setAllUsers(dataResponse.data);
+      const responseData = await fetchData.json();
+
+      if (responseData.success) {
+        setAllCategory(responseData.data);
+      } if (responseData.error) {
+        toast.error("cann't fetch list");
+      }
+    } catch (error) {
+      toast.error("cann't load")
     }
-    if (dataResponse.error) {
-      toast.error(dataResponse.message);
-    }
-  };
+  }
 
   useEffect(() => {
-    fetchAllUsers();
-  }, []);
+    fetchListCategories();
+  }, [])
 
-
-  //function handle edit user
-  const handleEditClick = (user) => {
-    setSelectedUser(user);
-    setEditUser(true);
-  };
-  const handleCloseEditUser = () => {
-    setEditUser(false);
-    setSelectedUser(null);
-  };
-  // end function edit user
-
-  // function handle delete user
-  const handleDeleteClick = (user) => {
-    setSelectedUser(user);
-    setDeleteUser(true);
-  };
-  const handleCloseDeleteUser = () => {
-    setDeleteUser(false);
-    setSelectedUser(null);
-  };
-
-  //function handle add user
   const handleAddClick = () => {
-    setIsAddUser(true);
+    setAddCategory(true);
   }
-  const handleCloseAddUser = () => {
-    setIsAddUser(false);
+  const handleCloseAddCate = () => {
+    setAddCategory(false);
   }
 
-  const updateUser = (updatedUser) => {
-    setAllUsers((prevUsers) =>
-      prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user))
-    );
-  };
+  const handleDeleteClick = (category) => {
+    setSelectedCategory(category);
+    setDeleteCategory(true);
+  }
+  const handleCloseDeleteCategory = () => {
+    setSelectedCategory(null);
+    setDeleteCategory(false);
+  }
 
-  const deleteUser = (deletedUser) => {
-    setAllUsers((prevUsers) =>
-      prevUsers.map((user) => (user._id !== deletedUser._id))
+  const deleteCategory = (deleteCategory) => {
+    setAllCategory((prevCategory) =>
+      prevCategory.map((category) => (category._id !== deleteCategory._id))
     );
   }
 
   return (
     <>
-      <div class="p-4 bg-white block sm:flex rounded-2xl items-center justify-between border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="w-full mb-1">
           <div class="mb-4 mt-20">
             <nav class="flex mb-5" aria-label="Breadcrumb">
@@ -84,24 +66,24 @@ export const AllUsers = () => {
                 <li class="inline-flex items-center">
                   <a href="#" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
                     <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                    Home
+                    Trang chủ
                   </a>
                 </li>
                 <li>
                   <div class="flex items-center">
                     <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Users</a>
+                    <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Danh mục</a>
                   </div>
                 </li>
                 <li>
                   <div class="flex items-center">
                     <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">List</span>
+                    <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Danh sách</span>
                   </div>
                 </li>
               </ol>
             </nav>
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">All users</h1>
+            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Danh sách danh mục</h1>
           </div>
           <div class="sm:flex">
             <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
@@ -127,13 +109,13 @@ export const AllUsers = () => {
               </div>
             </div>
             <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
-              <button 
+              <button
                 type="button"
-                className='flex bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'
                 onClick={handleAddClick}
+                className='flex bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800'
                 data-modal-target="add-user-modal" data-modal-toggle="add-user-modal" class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
                 <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                Add user
+                Add Category
               </button>
               <a href="#" class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
                 <svg class="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd"></path></svg>
@@ -144,95 +126,76 @@ export const AllUsers = () => {
         </div>
       </div>
 
-      {/* Table all users */}
       <div className="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg rounded-xl">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
             <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  <input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                  <label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
-                </div>
-              </th>
-              <th scope="col" className="px-6 py-3">Name</th>
-              <th scope="col" className="px-6 py-3">Position</th>
-              <th scope="col" className="px-6 py-3">Status</th>
-              <th scope="col" className="px-6 py-3">Action</th>
+              <th class="py-2 px-4 border-b dark:border-gray-700">Thứ tự</th>
+              <th class="py-2 px-4 border-b dark:border-gray-700">Tên danh mục</th>
+              <th class="py-2 px-4 border-b dark:border-gray-700">Mô tả</th>
+              <th class="py-2 px-4 border-b dark:border-gray-700">Status</th>
+              <th class="py-2 px-4 border-b dark:border-gray-700">Action</th>
             </tr>
           </thead>
           <tbody>
             {
-              allUsers.map((user) => (
-                <tr key={user?.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <td className="w-4 p-4">
-                    <div className="flex items-center">
-                      <input id={`checkbox-table-search-${user?.id}`} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                      <label htmlFor={`checkbox-table-search-${user?.id}`} className="sr-only">checkbox</label>
-                    </div>
-                  </td>
-                  <th scope="row" className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                    <img className="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-1.jpg" alt="Profile" />
-                    <div className="ps-3">
-                      <div class="text-base font-semibold">{user?.name}</div>
-                      <div class="font-normal text-gray-500">{user?.email}</div>
-                    </div>
-                  </th>
-                  <td className="px-6 py-4">{user?.role}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center">
-                      <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Online
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <button type="button"
-                      onClick={() => {
-                        handleEditClick(user);
-                      }}
-                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                      Edit User
-                    </button>
-                    <button type="button"
-                      onClick={() => {
-                        handleDeleteClick(user);
-                      }}
-                      className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete User</button>
-                  </td>
-                </tr>
+              allCategory.map((categories, index) => (
+                <>
+                  <tr className='bg-blue-400 border-b dark:bg-blue-500 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
+                    <td class="py-2 px-4 border-b dark:border-gray-700 text-xl font-bold">{index + 1}</td>
+                    <td class="py-2 px-4 text-xl font-semibold border-b dark:border-gray-700">{categories?.name}</td>
+                    <td class="py-2 px-4 border-b dark:border-gray-700">{categories?.description}</td>
+                    <td class="py-2 px-4 border-b dark:border-gray-700">{categories?.status}</td>
+                    <td class="py-2 px-4 border-b dark:border-gray-700">
+                      <button class="bg-yellow-400 hover:bg-blue-700 text-white font-normal py-1 px-4 rounded mr-2">Sửa</button>
+                      <button
+                        onClick={() => {
+                          handleDeleteClick(categories);
+                        }}
+                        class="bg-red-500 hover:bg-red-700 text-white font-normal py-1 px-4 rounded">Xóa</button>
+                    </td>
+                  </tr>
+                  {
+                    categories.subCategories.map((SubCategories, subIndex) => (
+                      <tr className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
+                        <td class="py-2 px-4 border-b dark:border-gray-700">{subIndex + 1}</td>
+                        <td class="py-2 px-4 border-b dark:border-gray-700 pl-8">{SubCategories?.name}</td>
+                        <td class="py-2 px-4 border-b dark:border-gray-700"></td>
+                        <td class="py-2 px-4 border-b dark:border-gray-700">Hiển thị</td>
+                        <td class="py-2 px-4 border-b dark:border-gray-700">
+                        </td>
+                      </tr>
+                    ))
+                  }
+
+                </>
               ))
             }
           </tbody>
         </table>
       </div>
 
-      {isEditUser && (
-        <EditUser
-          user={selectedUser}
-          onClose={handleCloseEditUser}
-          onUpdate={updateUser}
-          callFunc={fetchAllUsers}
-        />
-      )}
-
-      {isDeleteUser && (
-        <DeleteUser
-          user={selectedUser}
-          onClose={handleCloseDeleteUser}
-          onUpdate={deleteUser}
-          isOpen={isDeleteUser} 
-          callFunc={fetchAllUsers}
-        />
-      )}
-
       {
-        isAddUser && (
-          <AddUser 
-          isOpen={isAddUser}
-          onClose={handleCloseAddUser}
-          callFunc={fetchAllUsers}
+        isAddCategory && (
+          <AddCategory
+            onClose={handleCloseAddCate}
           />
         )
       }
+      {
+        isDeleteCategory && (
+          <DeleteCategory
+            onClose={handleCloseDeleteCategory}
+            category={selectedCategory}
+            onUpdate={deleteCategory}
+            isOpen={isDeleteCategory}
+            callFunc={fetchListCategories}
+          />
+        )
+      }
+
     </>
   );
 };
+
+export default AllCategries;

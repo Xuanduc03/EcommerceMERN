@@ -15,6 +15,7 @@ import { AdminPanel } from './admin/AdminPanel';
 import { AllUsers } from './admin/AllUsers';
 import { AllProducts } from './admin/AllProducts';
 import { AddProduct } from './admin/crud/AddProduct';
+import AllCategries from './admin/AllCategory';
 
 
 const router = createBrowserRouter([
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
           {
             path: "all-users",
             element: <AllUsers/>
+          },
+          {
+            path: "category",
+            element : <AllCategries />
           },
           {
             path: "products",

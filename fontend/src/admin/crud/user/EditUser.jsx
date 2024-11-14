@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Role from '../../common/role';
-import SummaryApi from '../../common/helper';
+import Role from '../../../common/role';
+import SummaryApi from '../../../common/helper';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
@@ -61,7 +61,7 @@ export const EditUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 sm:h-full sm:top-2 sm:absolute">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 top-4 md:inset-0 h-modal">
             <div className="relative w-full max-w-2xl p-4 bg-white rounded-lg shadow dark:bg-gray-800">
                 <div className="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
                     <h3 className="text-xl font-semibold dark:text-white">Edit User</h3>
@@ -129,7 +129,7 @@ export const EditUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
 
                 <div className="flex justify-end p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
                     <button
-                        className="text-white bg-primary-700 hover:bg-primary-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700"
+                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                         onClick={updateUser}
                     >
                         Save all

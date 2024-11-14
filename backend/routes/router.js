@@ -14,6 +14,9 @@ const AddUserController = require("../controller/userControllers/addUser");
 const AddProductController = require("../controller/productControllers/addProduct");
 const AllProductController = require("../controller/productControllers/allProduct");
 const DeleteProductController = require("../controller/productControllers/deleteProduct");
+const AddCategoryController = require("../controller/categoryControllers/addCategory");
+const ListCategoryController = require("../controller/categoryControllers/listCategory");
+const DeleteCategoryController = require("../controller/categoryControllers/deleteCategory");
 
 router.post('/signup', userSignUpController);
 router.post('/login', userLoginController);
@@ -32,5 +35,10 @@ router.post('/add-users', AddUserController);
 router.post('/add-products', AddProductController);
 router.get('/product-list', authToken, AllProductController);
 router.delete('/delete-product', DeleteProductController);
+
+// crud category
+router.post('/add-category', AddCategoryController);
+router.get("/list-category", ListCategoryController);
+router.delete('/delete-category', DeleteCategoryController);
 
 module.exports = router

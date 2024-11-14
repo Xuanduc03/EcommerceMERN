@@ -1,36 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import SummaryApi from '../../common/helper';
+import {React, useState, useEffect} from 'react'
 import { toast } from 'react-toastify';
+import SummaryApi from '../../../common/helper';
 
-export const DeleteUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
-    const [deleteUser , setDeleteUser] = useState(user?._id || "");
+export const DeleteCategory = ({onClose, category, onUpdate, isOpen, callFunc}) => {
+
+    const [deleteCategory , setdeleteCategory] = useState(category?._id || "");
 
     useEffect(() => {
-        if (isOpen && user) {
-            setDeleteUser(user?._id);
+        if (isOpen && category) {
+            setdeleteCategory(category?._id);
         }
-    }, [isOpen, user]);
+    }, [isOpen, category]);
 
-    const deletedUser  = async () => {
-        const deleteUser  = {
-            userId: user?._id
+    const DeteleCategory  = async () => {
+        const deleteCategory  = {
+            categoryId: category?._id
         };
         try {
-            const fetchData = await fetch(SummaryApi.delete_user.url, {
-                method: SummaryApi.delete_user.method,
+            const fetchData = await fetch(SummaryApi.delete_category.url, {
+                method: SummaryApi.delete_category.method,
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(deleteUser) // Gửi userId trong body
+                body: JSON.stringify(deleteCategory) // Gửi userId trong body
             });
     
             const responseData = await fetchData.json();
-            console.log("User being deleted:", responseData);
+            console.log("Category being deleted:", responseData);
     
             if (responseData.success) {
-                onUpdate(deleteUser);
-                toast.success("User  deleted successfully");
+                onUpdate(deleteCategory);
+                toast.success("Category deleted successfully");
                 callFunc();
                 onClose();
             }
@@ -43,9 +44,9 @@ export const DeleteUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
     };
 
 
-    return (
-        <div>
-            <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+  return (
+    <div>
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
                 <div class="relative w-full h-full max-w-md px-4 md:h-auto">
                     {/* <!-- Modal content --> */}
                     <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
@@ -58,8 +59,8 @@ export const DeleteUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
                         {/* <!-- Modal body --> */}
                         <div class="p-6 pt-0 text-center">
                             <svg class="w-16 h-16 mx-auto text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h3 class="mt-5 mb-6 text-lg text-gray-500 dark:text-gray-400">Are you sure you want to delete this user?</h3>
-                            <button type='button' onClick={deletedUser} class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2 dark:focus:ring-red-800">
+                            <h3 class="mt-5 mb-6 text-lg text-gray-500 dark:text-gray-400">Are you sure you want to delete this Category?</h3>
+                            <button type='button' onClick={DeteleCategory} class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2 dark:focus:ring-red-800">
                                 Yes, I'm sure
                             </button>
                             <a href="#" onClick={onClose} class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700" data-modal-hide="delete-user-modal">
@@ -69,6 +70,6 @@ export const DeleteUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
                     </div>
                 </div>
             </div>
-        </div>
-    )
+    </div>
+  )
 }

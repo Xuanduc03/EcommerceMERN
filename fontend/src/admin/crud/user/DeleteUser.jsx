@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import SummaryApi from '../../common/helper';
+import SummaryApi from '../../../common/helper';
 import { toast } from 'react-toastify';
 
-export const DeleteProduct = ({ product, onClose, onUpdate, isOpen, callFunc }) => {
-    const [deleteProduct , setdeleteProduct] = useState(product?._id || "");
+export const DeleteUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
+    const [deleteUser , setDeleteUser] = useState(user?._id || "");
 
     useEffect(() => {
-        if (isOpen && product) {
-            setdeleteProduct(product?._id);
+        if (isOpen && user) {
+            setDeleteUser(user?._id);
         }
-    }, [isOpen, product]);
+    }, [isOpen, user]);
 
-    const deteleProduct  = async () => {
-        const deleteProduct  = {
-            productId: product?._id
+    const deletedUser  = async () => {
+        const deleteUser  = {
+            userId: user?._id
         };
         try {
-            const fetchData = await fetch(SummaryApi.delete_product.url, {
-                method: SummaryApi.delete_product.method,
+            const fetchData = await fetch(SummaryApi.delete_user.url, {
+                method: SummaryApi.delete_user.method,
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(deleteProduct) // Gửi userId trong body
+                body: JSON.stringify(deleteUser) // Gửi userId trong body
             });
     
             const responseData = await fetchData.json();
-            console.log("Product being deleted:", responseData);
+            console.log("User being deleted:", responseData);
     
             if (responseData.success) {
-                onUpdate(deleteProduct);
-                toast.success("Product  deleted successfully");
+                onUpdate(deleteUser);
+                toast.success("User  deleted successfully");
                 callFunc();
                 onClose();
             }
@@ -58,8 +58,8 @@ export const DeleteProduct = ({ product, onClose, onUpdate, isOpen, callFunc }) 
                         {/* <!-- Modal body --> */}
                         <div class="p-6 pt-0 text-center">
                             <svg class="w-16 h-16 mx-auto text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h3 class="mt-5 mb-6 text-lg text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
-                            <button type='button' onClick={deteleProduct} class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2 dark:focus:ring-red-800">
+                            <h3 class="mt-5 mb-6 text-lg text-gray-500 dark:text-gray-400">Are you sure you want to delete this user?</h3>
+                            <button type='button' onClick={deletedUser} class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2 dark:focus:ring-red-800">
                                 Yes, I'm sure
                             </button>
                             <a href="#" onClick={onClose} class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700" data-modal-hide="delete-user-modal">
