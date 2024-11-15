@@ -8,22 +8,35 @@ export const AddProduct = ({ onClose }) => {
         name: "",
         description: "",
         summary: "",
+        oldPrice: "",
         price: "",
+        salePercent: "",
         category: "",
         stock: "",
+        installment : "",
         imageUrl: "",
         manufacturarName: "",
         productId: "",
-        processor: "", memory: "", display: "", storage: "", shipping: "", color: ""
+        processor: "", memory: "", display: "", camera: "", shipping: "", color: ""
     });
 
+    
     const handleChangeData = (e) => {
         const { name, value } = e.target;
 
-        setDataProduct((prev) => ({
-            ...prev,
-            [name]: value
-        }));
+        setDataProduct((prev) => {
+            const updatedData = {...prev, [name] : value};
+
+            // Tính toán giá đã giảm nếu có thay đổi về oldPrice hoặc salePercent
+            if ((name === "oldPrice" || name === "salePercent") && updatedData.oldPrice && updatedData.salePercent) {
+                const oldPrice = parseFloat(updatedData.oldPrice);
+                const salePercent = parseFloat(updatedData.salePercent);
+                const discountPrice = oldPrice - (oldPrice * (salePercent / 100));
+                updatedData.price = discountPrice.toFixed(2);  // Cập nhật giá đã giảm, làm tròn tới 2 chữ số
+            }
+
+            return updatedData;
+        })
     }
 
     const handleSubmit = async (e) => {
@@ -119,7 +132,7 @@ export const AddProduct = ({ onClose }) => {
                                         value={dataProduct.category}
                                         onChange={handleChangeData}
                                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="" disabled>Select a category</option> {/* Tùy chọn mặc định */}
+                                        <option value="" disabled>Select a category</option>
                                         <option value="điện thoại">Điện thoại</option>
                                         <option value="máy tính">Máy tính</option>
                                         <option value="phụ kiện">Phụ kiện</option>
@@ -141,13 +154,17 @@ export const AddProduct = ({ onClose }) => {
 
                         {/* Tags Section */}
                         <div className="bg-white p-6 rounded-md shadow">
-                            <h2 className="text-lg font-medium mb-4">Tags</h2>
+                            <h2 className="text-lg font-medium mb-4">Trả góp</h2>
                             <form className="space-y-4">
                                 <div>
-                                    <label className="block text-gray-700">Add a keyword:</label>
-                                    <select className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option>Select...</option>
-                                    </select>
+                                    <label className="block text-gray-700">Thêm phần trăm trả góp</label>
+                                    <input
+                                        type="text"
+                                        name="installment"
+                                        value={dataProduct.installment}
+                                        onChange={handleChangeData}
+                                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
                                 </div>
                             </form>
                         </div>
@@ -157,7 +174,27 @@ export const AddProduct = ({ onClose }) => {
                             <h2 className="text-lg font-medium mb-4 border-b">Giá sản phẩm</h2>
                             <form className="space-y-4">
                                 <div>
-                                    <label htmlFor="price" className="block text-gray-700">Giá gốc:</label>
+                                    <label htmlFor="oldPrice" className="block text-gray-700">Giá gốc:</label>
+                                    <input
+                                        type="number"
+                                        name="oldPrice"
+                                        value={dataProduct.oldPrice}
+                                        onChange={handleChangeData}
+                                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="salePercent" className="block text-gray-700">Phần trăm giảm giá:</label>
+                                    <input
+                                        type="number"
+                                        name="salePercent"
+                                        value={dataProduct.salePercent}
+                                        onChange={handleChangeData}
+                                        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="price" className="block text-gray-700">Giá đã giảm:</label>
                                     <input
                                         type="number"
                                         name="price"
@@ -183,11 +220,11 @@ export const AddProduct = ({ onClose }) => {
                                     <input
                                         name="shipping"
                                         type="radio"
-                                        value="grab"
+                                        value="Miễn phí Ship"
                                         onChange={handleChangeData}
-                                        checked={dataProduct.shipping === 'grab'}
+                                        checked={dataProduct.shipping === 'Miễn phí Ship'}
                                     />
-                                    <label htmlFor="grab" className="block text-md ml-2 text-grey-700">Grab</label>
+                                    <label htmlFor="Miễn phí Ship" className="block text-md ml-2 text-grey-700">Miễn phí Ship</label>
                                 </div>
                                 <div className='flex'>
                                     <input
@@ -430,7 +467,7 @@ export const AddProduct = ({ onClose }) => {
                                         <input
                                             type="text"
                                             name='display'
-                                            value={dataProduct.memory}
+                                            value={dataProduct.display}
                                             onChange={handleChangeData}
                                             placeholder="Kích thước màn hình"
                                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -440,15 +477,15 @@ export const AddProduct = ({ onClose }) => {
 
                                 <li className="flex justify-start items-center mb-2 pb-2 border-teal-100">
                                     <div className="flex-1">
-                                        <label htmlFor="storage" className='text-md font-bold text-gray-500'>Bộ nhớ trong</label>
+                                        <label htmlFor="camera" className='text-md font-bold text-gray-500'>Camera chính</label>
                                     </div>
                                     <div className="flex-1 ml-2">
                                         <input
                                             type="text"
-                                            name='storage'
-                                            value={dataProduct.storage}
+                                            name='camera'
+                                            value={dataProduct.camera}
                                             onChange={handleChangeData}
-                                            placeholder="Bộ nhớ trong"
+                                            placeholder="camera chính"
                                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
                                     </div>

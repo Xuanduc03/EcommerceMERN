@@ -13,8 +13,16 @@ const ProductSchema = new mongoose.Schema(
             type: String, 
             required: true
         },
+        oldPrice : {
+            type: Number,
+            required: true
+        },
         price : {
             type: Number, 
+            required: true
+        },
+        salePercent : {
+            type: Number,
             required: true
         },
         category : {
@@ -26,6 +34,9 @@ const ProductSchema = new mongoose.Schema(
             required : true
         },
         shipping : {
+            type: String
+        },
+        installment : {
             type: String
         },
         imageUrl : {
@@ -40,23 +51,23 @@ const ProductSchema = new mongoose.Schema(
         specifications: {
             processor: { 
                 type: String, 
-                required: true 
+                required: false 
             },
             memory: { 
                 type: String, 
-                required: true
+                required: false
             },
             display: { 
                 type: String, 
-                required: true 
+                required: false 
             },
-            storage: { 
+            camera: { 
                 type: String, 
-                required: true 
+                required: false 
             },
             color: {
                 type: String,
-                required : true
+                required : false
             }
         },
     },

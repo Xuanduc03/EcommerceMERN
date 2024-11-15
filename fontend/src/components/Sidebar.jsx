@@ -1,100 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import SummaryApi from '../common/helper';
+import { toast } from 'react-toastify';
 
 export const Sidebar = () => {
-    // Import toàn bộ ảnh trong thư mục
     const images = require.context('../assest/logo', false, /\.(png|jpe?g|svg|gif)$/);
 
-    const [hoverIndex, setHoverIndex] = useState(null);
+    const icon = ['./1-small.png', './1-small.png','./1-small.png','./2.png','./3.png','./5.png','./6.png','./7.png','./8.png','./9.png','./10.png']
 
-    const menuItems = [
-        { id: 1, name: "Điện thoại", imageSrc: "./1-small.png" }
-    ]
+    const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
+    const [allCategory, setAllCategory] = useState([]);
+
+    const fetchListCategories = async () => {
+        try {
+            const fetchData = await fetch(SummaryApi.list_category.url, {
+                method: SummaryApi.list_category.method,
+                credentials: "include"
+            });
+            const responseData = await fetchData.json();
+            if (responseData.success) {
+                setAllCategory(responseData.data);
+            } else if (responseData.error) {
+                toast.error("Cannot fetch list");
+            }
+        } catch (error) {
+            toast.error("Cannot load");
+        }
+    };
+
+    useEffect(() => {
+        fetchListCategories();
+    }, []);
+
+    const toggleDropdown = (index) => {
+        setOpenDropdownIndex(openDropdownIndex === index ? null : index);
+    };
 
     return (
         <div className='bg-white shadow-md relative rounded-lg'>
             <ul className="p-4">
-                <li className="mb-2 hover:bg-slate-100 flex items-center">
-                    <img className='mr-2' width={30} height={30} src={images('./icon-hot.gif')} alt="" />
-                    <p className="text-sm"></p>
-                    iPhone 16
-                </li>
-                <li className="mb-2 hover:bg-slate-100 flex items-center">
-                    <img className='mr-2' width={30} height={30} src={images('./icon-hot.gif')} alt="" />
-                    <p className="text-sm"></p>
-                    iPhone 15
-                </li>
-                {
-                    menuItems.map((item, index) => (
-                        <li className="flex items-center justify-between mb-2 hover:bg-slate-100"
-                            key={item.id}
-                            onMouseEnter={() => setHoverIndex(index)}
-                            onMouseLeave={() => setHoverIndex(null)}
-                        >
-                            <div className="flex items-center">
-                                <img className='mr-2' width={30} height={30} src={images('./1-small.png')} alt="" />
-                                <p className='text-sm cursor-pointer hover:text-red-500'>{item.name}</p>
-                            </div>
-                            <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
-                    ))
-                }
+                {allCategory.map((category, index) => (
+                    <li 
+                        className="flex items-center justify-between mb-2 hover:bg-slate-100 relative" 
+                        key={index}
+                        onClick={() => toggleDropdown(index)}
+                    >
+                        <div className="flex items-center">
+                            <img className='mr-2' width={30} height={30} src={images(icon[index])} alt="" />
+                            <p className='text-sm cursor-pointer hover:text-red-500'>{category?.name}</p>
+                        </div>
+                        <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} />
 
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./1-small.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">iPhone</p>
-                    </div>
-                    <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./2.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">Samsung</p>
-                    </div>
-                    <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./3.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">Tablet</p>
-                    </div>
-                    <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./5.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">Laptop</p>
-                    </div>
-                    <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./6.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">Đồng hồ</p>
-                    </div>
-                    <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./7.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">Hàng cũ</p>
-                    </div>
-                    <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./8.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">Thu cũ</p>
-                    </div>
-                </li>
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./9.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">Phụ kiện</p>
-                    </div>
-                    <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
-                <li className="flex items-center justify-between mb-2 hover:bg-slate-100">
-                    <div className="flex items-center">
-                        <img className='mr-2' width={30} height={30} src={images('./10.png')} alt="" />
-                        <p className="text-sm cursor-pointer hover:text-red-500">Âm Thanh</p>
-                    </div>
-                    <FontAwesomeIcon className="text-red-500 text-sm" icon={faChevronRight} /></li>
+                        {openDropdownIndex === index && category.subCategories && (
+                            <ul className="absolute z-50 left-[220px] h-full w-[500px] py-2 bg-white shadow-sm transition-opacity duration-200 text-sm text-gray-700 dark:text-gray-200">
+                                {category.subCategories.map((subCategory) => (
+                                    <li className='top-1  bg-white'>
+                                        <a href="#" className="block px-4 py-2 hover:text-red-700 cursor-pointer">
+                                            {subCategory?.name}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </li>
+                ))}
             </ul>
         </div>
-    )
-}
+    );
+};

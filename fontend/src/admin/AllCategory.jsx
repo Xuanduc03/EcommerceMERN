@@ -158,7 +158,7 @@ const AllCategries = () => {
                   {
                     categories.subCategories.map((SubCategories, subIndex) => (
                       <tr className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600'>
-                        <td class="py-2 px-4 border-b dark:border-gray-700">{subIndex + 1}</td>
+                        <td class="py-2 px-4 border-b dark:border-gray-700 pl-8">{subIndex + 1}</td>
                         <td class="py-2 px-4 border-b dark:border-gray-700 pl-8">{SubCategories?.name}</td>
                         <td class="py-2 px-4 border-b dark:border-gray-700"></td>
                         <td class="py-2 px-4 border-b dark:border-gray-700">Hiển thị</td>

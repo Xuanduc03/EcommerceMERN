@@ -2,7 +2,7 @@ const ProductModel = require("../../models/productModel");
 
 async function AddProductController(req, res) {
     try {
-        const { name, description, summary, price, category, stock, imageUrl, manufacturarName, productId, shipping,processor, memory, display, storage, color } = req.body;
+        const { name, description, summary, oldPrice, price, salePercent, category, stock,installment, imageUrl, manufacturarName, productId, shipping,processor, memory, display, camera, color } = req.body;
 
         // Kiểm tra giá
         if (price <= 0) {
@@ -18,14 +18,16 @@ async function AddProductController(req, res) {
             name,
             description,
             summary,
+            oldPrice,
             price,
+            salePercent,
             category,
-            stock,
+            stock,installment,
             imageUrl,
             manufacturarName,
             productId,
             shipping,
-            processor, memory, display, storage, color
+            processor, memory, display, camera, color
         };
 
         const newProduct = new ProductModel(payLoad);
