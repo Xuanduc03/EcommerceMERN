@@ -86,7 +86,7 @@ export const MainContent = () => {
                 {
                     allProducts.map((product) => (
                         <li className="relative mt-2 my-0 mx-[10px] min-h-[278px] max-w-[calc(20%-10px)] w-[250px] border bg-white rounded-xl shadow-lg">
-                            <a href="#" className='block h-full text-black px-10 py-3 transition duration-300' title={product.name}>
+                            <a href="#" className='block h-full text-black px-8 py-2 transition duration-300' title={product.name}>
                                 {/* thumnail image product */}
                                 <div className="flex items-center justify-center mb-2 relative">
                                     <img className='h-[150px] max-w-full object-cover w-auto' src={product.imageUrl} alt="" />

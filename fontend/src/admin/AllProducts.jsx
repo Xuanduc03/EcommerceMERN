@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SummaryApi from '../common/helper';
-import { DeleteProduct } from './crud/DeleteProduct';
+import { DeleteProduct } from './crud/product/DeleteProduct';
+import {EditProduct} from './crud/product/EditProduct'
 
 export const AllProducts = () => {
 
+  const navigate = useNavigate();
   const [allProducts, setAllProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isDeleteProduct, setDeleteProduct] = useState(false);
+  const [isUpdateProduct, setUpdateProduct] = useState(false);
 
   const fetchAllProducts = async() => {
     try {
@@ -43,6 +46,17 @@ export const AllProducts = () => {
     setSelectedProduct(null);
   };
 
+  const handleUpdateClick = (product) => {
+    setSelectedProduct(product);
+    navigate('/admin-panel/products/edit-products', {state : {product}});
+  }
+
+  const updateProduct = (updatedProducts) => {
+    setAllProducts((prevProduct) => 
+      prevProduct.map((product) => (product._id !== updatedProducts._id))
+    );
+  }
+
   const deleteProduct = (deleteProduct) => {
     setAllProducts((prevProduct) =>
       prevProduct.map((product) => (product._id !== deleteProduct._id))
@@ -50,6 +64,7 @@ export const AllProducts = () => {
   }
 
   return (
+    <>
     <div>
       <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="w-full mb-1 mt-20">
@@ -126,7 +141,7 @@ export const AllProducts = () => {
                 </div>
               </th>
               <th scope="col" className="px-6 py-3">Product Name</th>
-              <th scope="col" className="px-6 py-3">Description</th>
+              <th scope="col" className="px-6 py-3">Company</th>
               <th scope="col" className="px-6 py-3">Price</th>
               <th scope="col" className="px-6 py-3">Category</th>
               <th scope="col" className="px-6 py-3">Stock</th>
@@ -145,12 +160,12 @@ export const AllProducts = () => {
                     </div>
                   </td>
                   <th scope="row" className="flex flex-col items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                    <img className="w-20 h-20 rounded-full" src={product?.imageUrl} alt="image" />
+                    <img className="w-20 h-20 mb-2 rounded-md" src={product?.imageUrl} alt="image" />
                     <div className="ps-3">
                       <div class="text-base font-semibold">{product?.name}</div>
                     </div>
                   </th>
-                  <td className="px-6 py-4">{product?.summary}</td>
+                  <td className="px-6 py-4">{product?.manufacturarName}</td>
                   <td className="px-6 py-4">{product?.price}đ</td>
                   <td className="px-6 py-4">{product?.category}</td>
                   <td className="px-6 py-4">{product?.stock}</td>
@@ -161,9 +176,9 @@ export const AllProducts = () => {
                   </td>
                   <td className="px-6 py-4">
                     <button type="button"
-                      // onClick={() => {
-                      //   handleEditClick(user);
-                      // }}
+                      onClick={() => {
+                        handleUpdateClick(product);
+                      }}
                       className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                       Edit product
                     </button>
@@ -179,6 +194,15 @@ export const AllProducts = () => {
           </tbody>
         </table>
       </div>
+      </div>
+      {
+        isUpdateProduct && selectedProduct (
+          <EditProduct 
+            onUpdate={updateProduct}
+            callFunc={fetchAllProducts}
+          />
+        )
+      }
 
       {isDeleteProduct && (
         <DeleteProduct
@@ -189,7 +213,7 @@ export const AllProducts = () => {
           callFunc={fetchAllProducts}
         />
       )}
-
-    </div>
+  </>
+    
   )
 }

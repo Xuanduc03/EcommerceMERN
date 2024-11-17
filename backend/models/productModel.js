@@ -45,7 +45,7 @@ const ProductSchema = new mongoose.Schema(
         manufacturarName: {
             type: String,
         },
-        productId : {
+        productsId : {
             type : Number
         },
         specifications: {

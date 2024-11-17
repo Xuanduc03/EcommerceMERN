@@ -49,6 +49,10 @@ const SummaryApi = {
         url: `${backendDomain}/api/delete-product`,
         method: 'delete'
     },
+    update_product : {
+        url: `${backendDomain}/api/update-product`,
+        method : 'put'
+    },
 
 
     // crud category
@@ -63,7 +67,7 @@ const SummaryApi = {
     delete_category : {
         url : `${backendDomain}/api/delete-category`,
         method: 'delete'
-    }
+    },
     
 }
 

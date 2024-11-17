@@ -17,6 +17,7 @@ const DeleteProductController = require("../controller/productControllers/delete
 const AddCategoryController = require("../controller/categoryControllers/addCategory");
 const ListCategoryController = require("../controller/categoryControllers/listCategory");
 const DeleteCategoryController = require("../controller/categoryControllers/deleteCategory");
+const UpdateProductController = require("../controller/productControllers/updateProduct");
 
 router.post('/signup', userSignUpController);
 router.post('/login', userLoginController);
@@ -40,5 +41,6 @@ router.delete('/delete-product', DeleteProductController);
 router.post('/add-category', AddCategoryController);
 router.get("/list-category", ListCategoryController);
 router.delete('/delete-category', DeleteCategoryController);
+router.put('/update-product', UpdateProductController);
 
 module.exports = router

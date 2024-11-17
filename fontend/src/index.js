@@ -14,7 +14,8 @@ import { Provider } from 'react-redux';
 import { AdminPanel } from './admin/AdminPanel';
 import { AllUsers } from './admin/AllUsers';
 import { AllProducts } from './admin/AllProducts';
-import { AddProduct } from './admin/crud/AddProduct';
+import { AddProduct } from './admin/crud/product/AddProduct';
+import { EditProduct } from './admin/crud/product/EditProduct';
 import AllCategries from './admin/AllCategory';
 
 
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
               {
                 path: "add-products",
                 element: <AddProduct />
+              },
+              {
+                path: "edit-products",
+                element: <EditProduct />  
               }
             ]
           },

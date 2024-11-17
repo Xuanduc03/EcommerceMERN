@@ -66,7 +66,7 @@ export const MainBanner = () => {
           </span>
         </button>
 
-        <ul className="hidden md:flex items-center bg-white rounded-e-lg gap-2">
+        <ul className="hidden md:flex items-center bg-white rounded-e-lg">
           {
             slides.map((slide, index) => (
               <li key={index}
