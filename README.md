@@ -23,13 +23,3 @@ Trang web này sử dụng kiến trúc **MERN Stack**:
 ### 4. Database và Mongoose
 - **Mongoose**: Giúp tương tác dễ dàng với MongoDB, hỗ trợ xây dựng các schema linh hoạt và quản lý dữ liệu với các mối quan hệ giữa các bảng như **users**, **products**, **orders**, và **categories**.
 - MongoDB cho phép lưu trữ sản phẩm, người dùng, đơn hàng với các trường mở rộng, tối ưu hiệu suất truy vấn, và mở rộng dữ liệu.
-
-### 5. Triển khai và Bảo mật
-- **Triển khai trên Heroku hoặc DigitalOcean**: Các nền tảng phổ biến cho ứng dụng MERN stack, với chi phí hợp lý và hỗ trợ bảo mật SSL.
-- **Bảo mật API**: Sử dụng JWT hoặc OAuth để xác thực và ủy quyền các hành động nhạy cảm.
-- **Xử lý lỗi và tối ưu hóa**: Đảm bảo các API được tối ưu hóa và xử lý lỗi, giúp tăng tốc độ tải trang và nâng cao trải nghiệm người dùng.
-
-### 6. Tích hợp dịch vụ phụ trợ
-- **Email Notifications**: Gửi thông báo qua email cho người dùng khi có đơn hàng mới hoặc khi trạng thái đơn hàng thay đổi.
-
-Ứng dụng này giúp cung cấp trải nghiệm mua sắm nhanh chóng, tiện lợi và có khả năng mở rộng, phục vụ tốt cho các mục tiêu kinh doanh thương mại điện tử hiện đại.
