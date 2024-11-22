@@ -38,9 +38,9 @@ export default function Header() {
     return (
         <header className='h-16 shadow-md bg-white'>
             <div className='h-full container mx-auto flex items-center px-4 justify-between'>
-                <div className='pl-8'>
+                <Link to={'/home'} className='pl-8'>
                     <Logo w={90} h={60} />
-                </div>
+                </Link>
 
                 <div className='hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow'>
                     <input className='w-full pl-2 outline-none' type='text' placeholder='Please enter your product!' />

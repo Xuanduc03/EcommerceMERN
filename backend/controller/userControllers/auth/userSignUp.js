@@ -43,7 +43,6 @@ async function userSignUpController(req, res) {
         const userData = new userModel(payload);
         const saveUser = await userData.save();
 
-        // Trả về phản hồi thành công
         res.status(200).json({
             data: saveUser,
             success: true,

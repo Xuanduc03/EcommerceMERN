@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { EditUser } from './crud/user/EditUser';
 import { DeleteUser } from './crud/user/DeleteUser';
 import { AddUser } from './crud/user/AddUser';
+import axios from 'axios';
 
 
 export const AllUsers = () => {
@@ -14,11 +15,12 @@ export const AllUsers = () => {
   const [isAddUser, setIsAddUser] = useState(false);
 
   const fetchAllUsers = async () => {
-    const fetchData = await fetch(SummaryApi.all_users.url, {
+    const fetchData = await axios({
+      url: SummaryApi.all_users.url, 
       method: SummaryApi.all_users.method,
-      credentials: "include"
+      withCredentials: "true"
     });
-    const dataResponse = await fetchData.json();
+    const dataResponse = await fetchData.data;
 
     if (dataResponse.success) {
       setAllUsers(dataResponse.data);

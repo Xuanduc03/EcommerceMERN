@@ -17,6 +17,8 @@ import { AllProducts } from './admin/AllProducts';
 import { AddProduct } from './admin/crud/product/AddProduct';
 import { EditProduct } from './admin/crud/product/EditProduct';
 import AllCategries from './admin/AllCategory';
+import { DetailProduct } from './components/DetailProduct';
+import { Product } from './pages/Product';
 
 
 const router = createBrowserRouter([
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
       {
         path : "/home",
         element : <Home />
+      },
+      {
+        path : "/product",
+        element: <Product />
+      },
+      {
+        path : "/product/:productId",
+        element: <DetailProduct />
       },
       {
         path : "/login",

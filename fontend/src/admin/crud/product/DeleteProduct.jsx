@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SummaryApi from '../../../common/helper';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export const DeleteProduct = ({ product, onClose, onUpdate, isOpen, callFunc }) => {
     const [deleteProduct , setdeleteProduct] = useState(product?._id || "");
@@ -16,17 +17,17 @@ export const DeleteProduct = ({ product, onClose, onUpdate, isOpen, callFunc }) 
             productId: product?._id
         };
         try {
-            const fetchData = await fetch(SummaryApi.delete_product.url, {
+            const response = await axios({
+                url: SummaryApi.delete_product.url,
                 method: SummaryApi.delete_product.method,
-                credentials: "include",
+                withCredentials: "true",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type" : "application/json"
                 },
-                body: JSON.stringify(deleteProduct) // Gửi userId trong body
-            });
+                data: deleteProduct
+            })
     
-            const responseData = await fetchData.json();
-            console.log("Product being deleted:", responseData);
+            const responseData = response.data
     
             if (responseData.success) {
                 onUpdate(deleteProduct);

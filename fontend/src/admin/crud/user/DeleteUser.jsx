@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from "axios";
 import SummaryApi from '../../../common/helper';
 import { toast } from 'react-toastify';
 
@@ -12,20 +13,21 @@ export const DeleteUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
     }, [isOpen, user]);
 
     const deletedUser  = async () => {
-        const deleteUser  = {
+        const deleteUserPayload  = {
             userId: user?._id
         };
         try {
-            const fetchData = await fetch(SummaryApi.delete_user.url, {
+            const response = await axios({
+                url: SummaryApi.delete_user.url,
                 method: SummaryApi.delete_user.method,
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
+                withCredentials: "true",
+                headers : {
+                    "Content-Type" : "application/json",
                 },
-                body: JSON.stringify(deleteUser) // Gửi userId trong body
+                data: deleteUserPayload
             });
     
-            const responseData = await fetchData.json();
+            const responseData = response.data;
             console.log("User being deleted:", responseData);
     
             if (responseData.success) {

@@ -3,6 +3,7 @@ import { AddCategory } from './crud/category/AddCategory';
 import SummaryApi from '../common/helper';
 import { toast } from 'react-toastify';
 import { DeleteCategory } from './crud/category/DeleteCategory';
+import axios from 'axios';
 
 
 const AllCategries = () => {
@@ -13,12 +14,12 @@ const AllCategries = () => {
 
   const fetchListCategories = async () => {
     try {
-      const fetchData = await fetch(SummaryApi.list_category.url, {
+      const fetchData = await axios({
+        url: SummaryApi.list_category.url,
         method: SummaryApi.list_category.method,
-        credentials: "include"
-      });
-
-      const responseData = await fetchData.json();
+        withCredentials: "true"
+      })
+      const responseData = await fetchData.data;
 
       if (responseData.success) {
         setAllCategory(responseData.data);

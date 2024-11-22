@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import SummaryApi from '../common/helper';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export default function SignUp() {
     // Sử dụng useState để quản lý trạng thái của form với hai trường email và password
@@ -13,11 +14,11 @@ export default function SignUp() {
     });
     const navigate = useNavigate()
 
-    // Hàm này sẽ được gọi khi người dùng nhập dữ liệu vào các input field
+   
     const handleOnChange = (e) => {
         const { name, value } = e.target; // Lấy tên và giá trị của input (name tương ứng với email hoặc password)
 
-        // Cập nhật trạng thái (state) với giá trị mới mà người dùng nhập vào
+
         setData((preve) => {
             return {
                 ...preve,        // Sao chép toàn bộ dữ liệu hiện tại của state (để không ghi đè các giá trị khác)
@@ -26,26 +27,25 @@ export default function SignUp() {
         });
     };
 
-    // Hàm này sẽ được gọi khi form được submit
     const handleSubmit = async (e) => {
-        e.preventDefault();  // Ngăn không cho trang web reload lại khi form được submit
+        e.preventDefault(); 
 
         if (data.password !== data.confirmPassword) {
-            alert("Passwords do not match!");  // Hiển thị cảnh báo nếu mật khẩu không khớp
-            return;  // Dừng lại không gửi yêu cầu nếu mật khẩu không khớp
+            alert("Passwords do not match!"); 
+            return; 
         }
 
         try {
-            // Gửi dữ liệu đến server
-            const response = await fetch(SummaryApi.SignUp.url, {
+            const response = await axios({
+                url: SummaryApi.SignUp.url,
                 method: SummaryApi.SignUp.method,
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(data)  // Chuyển dữ liệu state thành JSON
+                data: data
             });
 
-            const result = await response.json();  // Chờ kết quả trả về từ server và chuyển thành JSON
+            const result = await response.data; 
             if (result.success) {
                 toast.success(result.message);
                 navigate("/login")

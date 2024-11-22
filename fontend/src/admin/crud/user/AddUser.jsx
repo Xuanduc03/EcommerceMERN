@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import SummaryApi from '../../../common/helper';
 import Role from '../../../common/role';
+import axios from 'axios';
 
 export const AddUser = ({onClose, callFunc }) => {
     const [addData, setAddData] = useState({
@@ -26,15 +27,17 @@ export const AddUser = ({onClose, callFunc }) => {
         e.preventDefault();
 
         try {
-            const fetchData = await fetch(SummaryApi.add_user.url, {
+            const response = await axios({
+                url: SummaryApi.add_user.url,
                 method: SummaryApi.add_user.method,
-                headers: {
-                    "Content-Type": "application/json",
+                withCredentials: "include",
+                headers : {
+                    "Content-Type" : "application/json"
                 },
-                body: JSON.stringify(addData)
-            });
+                data : addData
+            })
 
-            const responseData = await fetchData.json();
+            const responseData = response.data;
 
             if (responseData.success) {
                 toast.success("Add user successful");
@@ -45,7 +48,7 @@ export const AddUser = ({onClose, callFunc }) => {
                 toast.error(responseData.message);
             }
         } catch (error) {
-            toast("Can't add user!");
+            toast.error("Can't add user!");
         }
     }
 

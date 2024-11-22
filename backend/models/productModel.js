@@ -51,23 +51,18 @@ const ProductSchema = new mongoose.Schema(
         specifications: {
             processor: { 
                 type: String, 
-                required: false 
             },
             memory: { 
                 type: String, 
-                required: false
             },
             display: { 
                 type: String, 
-                required: false 
             },
             camera: { 
                 type: String, 
-                required: false 
             },
             color: {
                 type: String,
-                required : false
             }
         },
     },

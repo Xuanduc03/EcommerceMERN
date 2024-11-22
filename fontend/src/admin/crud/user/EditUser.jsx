@@ -4,6 +4,7 @@ import SummaryApi from '../../../common/helper';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 export const EditUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
     const [updatedRole, setupdatedRole] = useState(user?.role || "");
@@ -25,7 +26,7 @@ export const EditUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
     };
 
     const updateUser = async () => {
-        const updatedUser = {
+        const updatedUserPayload = {
             userId: user?._id, // Lấy ID từ user object
             name: updatedName,
             email: updatedEmail,
@@ -34,20 +35,21 @@ export const EditUser = ({ user, onClose, onUpdate, isOpen, callFunc }) => {
         };
 
         try {
-            const fetchData = await fetch(SummaryApi.update_user.url, {
+            const response = await axios({
+                url: SummaryApi.update_user.url,
                 method: SummaryApi.update_user.method,
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
+                withCredentials: "true",
+                headers : {
+                    "Content-Type" : "application/json"
                 },
-                body: JSON.stringify(updatedUser) // Truyền đúng cấu trúc
-            });
+                data: updatedUserPayload
+            })
 
-            const responseData = await fetchData.json();
+            const responseData = response.data;
             console.log("User being updated:", responseData);
 
             if (responseData.success) {
-                onUpdate(updatedUser);
+                onUpdate(updatedUserPayload);
                 toast.success("User is updated");
                 callFunc();
                 onClose(); // Đóng chỉ khi thành công

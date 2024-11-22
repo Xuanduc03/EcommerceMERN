@@ -36,11 +36,12 @@ router.post('/add-users', AddUserController);
 router.post('/add-products', AddProductController);
 router.get('/product-list', authToken, AllProductController);
 router.delete('/delete-product', DeleteProductController);
+router.put('/update-product', UpdateProductController);
 
 // crud category
 router.post('/add-category', AddCategoryController);
 router.get("/list-category", ListCategoryController);
 router.delete('/delete-category', DeleteCategoryController);
-router.put('/update-product', UpdateProductController);
+
 
 module.exports = router

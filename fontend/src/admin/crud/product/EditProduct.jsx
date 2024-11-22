@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import SummaryApi from '../../../common/helper';
 
 export const EditProduct = ({ onUpdate, callFunc }) => {
@@ -22,11 +23,14 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
     const [updatedManufacturarName, setUpdatedManufacturarName] = useState(product?.manufacturarName || "");
     const [updatedProductsId, setUpdatedProductsId] = useState(product?.productsId || "");
     const [updatedShipping, setUpdatedShipping] = useState(product?.shipping || "");
-    const [updatedProcessor, setUpdatedProcessor] = useState(product?.processor || "");
-    const [updatedMemory, setUpdatedMemory] = useState(product?.memory || "");
-    const [updatedDisplay, setUpdatedDisplay] = useState(product?.display || "");
-    const [updatedCamera, setUpdatedCamera] = useState(product?.camera || "");
-    const [updatedColor, setUpdatedColor] = useState(product?.color || "");
+    const [specifications, setSpecifications] = useState({
+        updatedProcessor: product?.specifications?.processor || "",
+        updatedMemory: product?.specifications?.memory || "",
+        updatedDisplay: product?.specificationsdisplay || "",
+        updatedCamera: product?.specifications?.camera || "",
+        updatedColor: product?.specifications?.color || "",
+    });
+    
 
     // Dependency array [product]
     useEffect(() => {
@@ -44,22 +48,30 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
             setUpdatedManufacturarName(product.manufacturarName || "");
             setUpdatedProductsId(product.productsId || "");
             setUpdatedShipping(product.shipping || "");
-            setUpdatedProcessor(product.processor || "");
-            setUpdatedMemory(product.memory || "");
-            setUpdatedDisplay(product.display || "");
-            setUpdatedCamera(product.camera || "");
-            setUpdatedColor(product.color || "");
+            setSpecifications({
+                updatedProcessor: product?.specifications?.processor || "",
+                updatedMemory: product?.specifications?.memory || "",
+                updatedDisplay: product?.specifications?.display || "",
+                updatedCamera: product?.specifications?.camera || "",
+                updatedColor: product?.specifications?.color || "",
+            });            
         }
     }, [product]);
     
-
+    const handleSpecificationsChange = (field, value) => {
+        setSpecifications((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+    
 
     const handleOnChangeSelect = (e) => {
         setUpdatedCategory(e.target.value);
     }
 
     const updateProduct = async () => {
-        const updatedProduct = {
+        const updatedProductPayload = {
             productId: product?._id,
             name: updatedName,
             description: updatedDescription,
@@ -74,30 +86,25 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
             manufacturarName: updatedManufacturarName,
             productsId: updatedProductsId,
             shipping: updatedShipping,
-            processor: updatedProcessor,
-            memory: updatedMemory,
-            display: updatedDisplay,
-            camera: updatedCamera,
-            color: updatedColor
+            specifications,
         };
-        console.log("Payload:", updatedProduct);
 
         try {
-            const fetchData = await fetch(SummaryApi.update_product.url,{
-                method : SummaryApi.update_product.method,
-                credentials : "include",
+            const response = await axios({
+                url: SummaryApi.update_product.url,
+                method: SummaryApi.update_product.method,
+                withCredentials: "true",
                 headers : {
-                    "Content-Type": "application/json"
+                    "Content-Type" : "application/json"
                 },
-                body : JSON.stringify(updatedProduct)
+                data : updatedProductPayload
             })
 
-            const responseData = await fetchData.json();
-            console.log("Product update: ", responseData)
-
+            const responseData = response.data;
+            console.log("data luu", responseData)
             if(responseData.success) {
-                onUpdate(updatedProduct);
                 toast.success("Cập nhật thành công");
+                onUpdate(updatedProductPayload);
                 callFunc();
                 navigate("/admin-panel/products/product-list");
             }else {
@@ -346,7 +353,7 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
                                         type="text"
                                         name="name"
                                         value={updatedName}
-                                        onChange={(e) => setUpdatedCamera(e.target.value)}
+                                        onChange={(e) => setUpdatedName(e.target.value)}
                                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
@@ -481,8 +488,8 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
                                         <input
                                             type="text"
                                             name='processor'
-                                            value={updatedProcessor}
-                                            onChange={(e) => setUpdatedProcessor(e.target.value)}
+                                            value={specifications.updatedProcessor}
+                                            onChange={(e) => handleSpecificationsChange("updatedProcessor", e.target.value)}
                                             placeholder="CPU"
                                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
@@ -497,8 +504,8 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
                                         <input
                                             type="text"
                                             name='memory'
-                                            value={updatedMemory}
-                                            onChange={(e) => setUpdatedMemory(e.target.value)}
+                                            value={specifications.updatedMemory}
+                                            onChange={(e) => handleSpecificationsChange("updatedMemory", e.target.value)}
                                             placeholder="Bộ nhớ"
                                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
@@ -513,8 +520,8 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
                                         <input
                                             type="text"
                                             name='display'
-                                            value={updatedDisplay}
-                                            onChange={(e) => setUpdatedDisplay(e.target.value)}
+                                            value={specifications.updatedDisplay}
+                                            onChange={(e) => handleSpecificationsChange("updatedDisplay", e.target.value)}
                                             placeholder="Kích thước màn hình"
                                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
@@ -529,8 +536,8 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
                                         <input
                                             type="text"
                                             name='camera'
-                                            value={updatedCamera}
-                                            onChange={(e) => setUpdatedCamera(e.target.value)}
+                                            value={specifications.updatedCamera}
+                                            onChange={(e) => handleSpecificationsChange("updatedCamera", e.target.value)}
                                             placeholder="camera chính"
                                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
@@ -545,8 +552,8 @@ export const EditProduct = ({ onUpdate, callFunc }) => {
                                         <input
                                             type="text"
                                             name='color'
-                                            value={updatedColor}
-                                            onChange={(e) => setUpdatedColor(e.target.value)}
+                                            value={specifications.updatedColor}
+                                            onChange={(e) => handleSpecificationsChange("updatedColor", e.target.value)}
                                             placeholder="Màu sắc"
                                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />

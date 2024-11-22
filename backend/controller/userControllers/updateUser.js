@@ -1,4 +1,5 @@
 const userModel = require("../../models/userModel");
+const bcrypt = require("bcryptjs");
 
 async function UpdateUserController(req, res) {
     try {
@@ -7,9 +8,15 @@ async function UpdateUserController(req, res) {
         const payLoad = {
             ...(email && { email }),
             ...(name && { name }),
-            ...(password && { password }), // Mã hóa mật khẩu
             ...(role && { role })
         };
+
+        if(password){
+              // Băm mật khẩu
+            const salt = bcrypt.genSaltSync(10);
+            const hashPassword = bcrypt.hashSync(password, salt);
+            payLoad.password = hashPassword;
+        }
 
         const user = await userModel.findById(userId); // Tìm người dùng theo userId
         if (!user) {
@@ -21,7 +28,7 @@ async function UpdateUserController(req, res) {
         }
 
         const updateUser = await userModel.findByIdAndUpdate(userId, payLoad, { new: true }); // Cập nhật người dùng và trả về dữ liệu sau khi cập nhật
-
+        console.log(updateUser)
         res.status(200).json({
             data: updateUser,
             message: "User is updated",

@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import SummaryApi from '../common/helper';
 import { DeleteProduct } from './crud/product/DeleteProduct';
 import {EditProduct} from './crud/product/EditProduct'
+import axios from 'axios';
 
 export const AllProducts = () => {
 
@@ -15,11 +16,12 @@ export const AllProducts = () => {
 
   const fetchAllProducts = async() => {
     try {
-      const fetchAll = await fetch(SummaryApi.all_product.url,{
+      const fetchAll = await axios({
+        url: SummaryApi.all_product.url,
         method: SummaryApi.all_product.method,
-        credentials: "include"
-      });
-      const dataResponse = await fetchAll.json();
+        withCredentials: "true"
+      })
+      const dataResponse = await fetchAll.data;
 
       if(dataResponse.success){
         setAllProducts(dataResponse.data);

@@ -1,4 +1,5 @@
 const userModel = require("../../models/userModel");
+const bcrypt = require("bcryptjs");
 
 async function AddUserController(req, res) {
     try {
@@ -11,6 +12,9 @@ async function AddUserController(req, res) {
                 error: true
             })
         }
+        // Băm mật khẩu
+        const salt = bcrypt.genSaltSync(10);
+        const hashPassword = await bcrypt.hashSync(password, salt);
 
         const existingUser = await userModel.findOne({email});
 
@@ -24,11 +28,13 @@ async function AddUserController(req, res) {
         
         const payLoad = {
             ...req.body,
+            password: hashPassword
         }
 
         const newUser = new userModel(payLoad);
         const savedUser = await newUser.save();
 
+        console.log(savedUser);
         res.status(200).json({
             data: savedUser,
             message: "Add User is successful",

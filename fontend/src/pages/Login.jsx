@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import SummaryApi from '../common/helper';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Login = () => {
-  const [data, setData] = useState({
+  const [dataLogin, setData] = useState({
     email: "",
     password: ""
   });
@@ -13,9 +14,8 @@ const Login = () => {
 
   // Hàm này sẽ được gọi khi người dùng nhập dữ liệu vào các input field
   const handleOnChange = (e) => {
-    const { name, value } = e.target; // Lấy tên và giá trị của input (name tương ứng với email hoặc password)
+    const { name, value } = e.target;
 
-    // Cập nhật trạng thái (state) với giá trị mới mà người dùng nhập vào
     setData((preve) => {
       return {
         ...preve,        // Sao chép toàn bộ dữ liệu hiện tại của state (để không ghi đè các giá trị khác)
@@ -26,22 +26,24 @@ const Login = () => {
 
   // Hàm này sẽ được gọi khi form được submit
   const handleSubmit = async (e) => {
-    e.preventDefault();  // Ngăn không cho trang web reload lại khi form được submit
-    // Thực hiện các hành động khác khi form submit (như gửi dữ liệu lên server hoặc kiểm tra tính hợp lệ)
-    const dataResponse = await fetch(SummaryApi.Login.url, {
+    e.preventDefault(); 
+    
+    const dataResponse = await axios({
+      url: SummaryApi.Login.url,
       method: SummaryApi.Login.method,
-      credentials: 'include',
-      headers: {
-        "content-type": "application/json"
+      withCredentials: 'true',
+      headers :{
+        "Content-Type" : "application/json"
       },
-      body: JSON.stringify(data)
+      data: dataLogin
     })
 
-    const dataApi = await dataResponse.json();
+    const dataApi = await dataResponse.data;
 
     if (dataApi.success) {
       toast.success("User is login success")
-      navigate('/home')
+      navigate('/home');
+      window.location.reload();
     } if (dataApi.error) {
       toast.error("User is not valid")
     }
@@ -65,7 +67,7 @@ const Login = () => {
               <div class="mt-2">
                 <input id="email"
                   name="email"
-                  value={data.email}
+                  value={dataLogin.email}
                   onChange={handleOnChange}
                   type="email"
                   autocomplete="email"
@@ -85,7 +87,7 @@ const Login = () => {
               <div class="mt-2">
                 <input id="password"
                   name="password"
-                  value={data.password}
+                  value={dataLogin.password}
                   onChange={handleOnChange}
                   type="password"
                   autocomplete="current-password"

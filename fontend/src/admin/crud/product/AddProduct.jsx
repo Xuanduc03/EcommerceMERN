@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SummaryApi from '../../../common/helper';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export const AddProduct = ({ onClose }) => {
     const [dataProduct, setDataProduct] = useState({
@@ -43,15 +44,17 @@ export const AddProduct = ({ onClose }) => {
         e.preventDefault();
 
         try {
-            const fetchData = await fetch(SummaryApi.add_product.url, {
+            const response = await axios({
+                url: SummaryApi.add_product.url,
                 method: SummaryApi.add_product.method,
-                headers: {
-                    "Content-Type": "application/json"
+                withCredentials : "true",
+                headers:{
+                    "Content-Type" : "application/json"
                 },
-                body: JSON.stringify(dataProduct)
-            });
+                data: dataProduct
+            })
 
-            const responseData = await fetchData.json();
+            const responseData = response.data;
 
             if (responseData.success) {
                 toast.success("Add product successful");

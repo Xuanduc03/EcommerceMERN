@@ -3,6 +3,8 @@ import SummaryApi from '../common/helper';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export const MainContent = () => {
 
@@ -12,11 +14,12 @@ export const MainContent = () => {
     //callback function get category
     const fetchListCategories = async () => {
         try {
-            const fetchData = await fetch(SummaryApi.list_category.url, {
+            const fetchData = await axios({
+                url: SummaryApi.list_category.url,
                 method: SummaryApi.list_category.method,
-                credentials: "include"
+                withCredentials: "true"
             });
-            const responseData = await fetchData.json();
+            const responseData = await fetchData.data;
             if (responseData.success) {
                 setAllCategory(responseData.data);
             } else if (responseData.error) {
@@ -30,11 +33,12 @@ export const MainContent = () => {
     // callback function get fullproduct
     const fetchAllProducts = async () => {
         try {
-            const fetchAll = await fetch(SummaryApi.all_product.url, {
+            const fetchAll = await axios({
+                url: SummaryApi.all_product.url,
                 method: SummaryApi.all_product.method,
-                credentials: "include"
+                withCredentials: "true"
             });
-            const dataResponse = await fetchAll.json();
+            const dataResponse = await fetchAll.data;
 
             if (dataResponse.success) {
                 setAllProducts(dataResponse.data);
@@ -53,7 +57,7 @@ export const MainContent = () => {
     }, []);
 
     const formatPrice = (value) => {
-        if(value === "") return "";
+        if (value === "") return "";
         return new Intl.NumberFormat('vi-VN').format(value);
     }
 
@@ -64,9 +68,9 @@ export const MainContent = () => {
             <div className="mt-1 w-full">
                 {allCategory.length > 0 && (
                     <div className="flex items-center justify-around">
-                        <p className="bg-gradient-to-l from-[#434343] to-black rounded-[12px] text-white float-left text-[16px] font-bold h-[32px] flex justify-center items-center mb-0 min-w-[230px] px-[15px] uppercase cursor-pointer">
+                        <Link to={'/product'} className="bg-gradient-to-l from-[#434343] to-black rounded-[12px] text-white float-left text-[16px] font-bold h-[32px] flex justify-center items-center mb-0 min-w-[230px] px-[15px] uppercase cursor-pointer">
                             {allCategory[1].name}
-                        </p>
+                        </Link>
                         <ul className="flex items-center">
                             {
                                 allCategory[1].subCategories.map((subCategory) => (
@@ -105,11 +109,11 @@ export const MainContent = () => {
                                     </div>
                                     <div className="flex items-center">
                                         <div className="mr-2">
-                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar}/>
-                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar}/>
-                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar}/>
-                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar}/>
-                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar}/>
+                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar} />
+                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar} />
+                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar} />
+                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar} />
+                                            <FontAwesomeIcon className='text-gray-300 text-[12px]' icon={faStar} />
                                         </div>
                                         <p className="text-gray-300 text-[12px]">Đánh giá</p>
                                     </div>
